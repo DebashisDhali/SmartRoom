@@ -13,14 +13,25 @@ app.use(express.json({ limit: '100mb' }));
 app.use(express.urlencoded({ limit: '100mb', extended: true }));
 app.use(cookieParser());
 app.use(cors({
-    origin: [
-        'http://localhost:5173', 
-        'http://localhost:5174',
-        'http://127.0.0.1:5173',
-        'http://127.0.0.1:5174',
-        process.env.FRONTEND_URL, // For production
-        /\.vercel\.app$/ // Allow all Vercel subdomains (useful for preview deployments)
-    ],
+    origin: function (origin, callback) {
+        const allowedOrigins = [
+            'http://localhost:5173', 
+            'http://localhost:5174',
+            'http://127.0.0.1:5173',
+            'http://127.0.0.1:5174',
+            process.env.FRONTEND_URL,
+        ];
+        
+        // Allow requests with no origin (like mobile apps or curl requests)
+        if (!origin) return callback(null, true);
+        
+        if (allowedOrigins.indexOf(origin) !== -1 || /vercel\.app$/.test(origin)) {
+            return callback(null, true);
+        }
+        
+        console.log('Blocked by CORS:', origin); // Log blocked origins for debugging
+        return callback(new Error('Not allowed by CORS'), false);
+    },
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization']

@@ -45,14 +45,20 @@ export const AuthProvider = ({ children }) => {
     const register = async (userData) => {
         try {
             setLoading(true);
-            const config = userData instanceof FormData ? { headers: { 'Content-Type': 'multipart/form-data' } } : {};
-            const { data } = await api.post('/auth/register', userData, config);
+            // Don't set Content-Type manually for FormData, let Axios handle it with boundary
+            const { data } = await api.post('/auth/register', userData);
             setUser(data.user);
             setIsAuthenticated(true);
             toast.success('Registered successfully');
             return data;
         } catch (error) {
-            const message = error.response?.data?.message || error.message || 'Registration failed';
+            console.error("Registration Error:", error);
+            let message = error.response?.data?.message || error.message || 'Registration failed';
+
+            if (error.code === "ERR_NETWORK") {
+                message = "Network Error: Please check your connection and ensure the server is running. If on Vercel, check the VITE_API_URL setting.";
+            }
+
             toast.error(message);
             throw error;
         } finally {
