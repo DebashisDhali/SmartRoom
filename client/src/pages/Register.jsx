@@ -126,6 +126,7 @@ const Register = () => {
                                         onChange={handleChange}
                                         className="input-field pl-10"
                                         placeholder="John Doe"
+                                        minLength={4}
                                     />
                                 </div>
                             </div>
@@ -181,6 +182,7 @@ const Register = () => {
                                     onChange={handleChange}
                                     className="input-field pl-10"
                                     placeholder="At least 8 characters"
+                                    minLength={8}
                                 />
                             </div>
                         </div>
