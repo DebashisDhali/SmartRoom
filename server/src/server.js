@@ -15,10 +15,18 @@ process.on("uncaughtException", (err) => {
 // Redundant config removed
 
 // Connecting to database
-connectDatabase();
+// Connecting to database
+// connectDatabase();
 
-const server = app.listen(process.env.PORT, () => {
-    console.log(`Server is working on http://localhost:${process.env.PORT}`);
+// const server = app.listen(process.env.PORT, () => {
+//     console.log(`Server is working on http://localhost:${process.env.PORT}`);
+// });
+
+// Better startup: Connect to DB first, then start server
+connectDatabase().then(() => {
+    const server = app.listen(process.env.PORT || 5000, () => {
+        console.log(`Server is working on http://localhost:${process.env.PORT || 5000}`);
+    });
 });
 
 // Unhandled Promise Rejection
