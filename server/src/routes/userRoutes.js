@@ -6,7 +6,7 @@ const router = express.Router();
 
 const upload = require('../middlewares/multer');
 
-router.post('/register', upload.none(), registerUser);
+router.post('/register', registerUser);
 router.post('/login', loginUser);
 router.get('/logout', logout);
 router.get('/me', isAuthenticatedUser, getUserDetails);

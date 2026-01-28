@@ -31,13 +31,14 @@ const Register = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const data = new FormData();
-            data.append('name', formData.name);
-            data.append('email', formData.email);
-            data.append('phone', formData.phone);
-            data.append('password', formData.password);
-            data.append('role', formData.role);
-            // Avatar is optional/removed for now
+            // Send as plain JSON object since we removed the avatar upload
+            const data = {
+                name: formData.name,
+                email: formData.email,
+                phone: formData.phone,
+                password: formData.password,
+                role: formData.role
+            };
 
             await register(data);
             navigate('/dashboard');
