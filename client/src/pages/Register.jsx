@@ -37,7 +37,7 @@ const Register = () => {
             data.append('phone', formData.phone);
             data.append('password', formData.password);
             data.append('role', formData.role);
-            if (avatar) data.append('avatar', avatar);
+            // Avatar is optional/removed for now
 
             await register(data);
             navigate('/dashboard');
@@ -65,29 +65,7 @@ const Register = () => {
                 </div>
 
                 <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
-                    {/* Avatar Upload */}
-                    <div className="flex flex-col items-center mb-6">
-                        <label className="relative cursor-pointer group">
-                            <div className={`w-24 h-24 rounded-full border-4 border-white shadow-xl overflow-hidden bg-slate-100 flex items-center justify-center transition-all ${!avatarPreview && 'group-hover:bg-primary-50'}`}>
-                                {avatarPreview ? (
-                                    <img src={avatarPreview} alt="Avatar Preview" className="w-full h-full object-cover" />
-                                ) : (
-                                    <User size={40} className="text-slate-300 group-hover:text-primary-400 transition-colors" />
-                                )}
-                            </div>
-                            <div className="absolute bottom-0 right-0 bg-primary-600 text-white p-2 rounded-full shadow-lg group-hover:scale-110 transition-transform">
-                                <Camera size={16} />
-                            </div>
-                            <input
-                                type="file"
-                                name="avatar"
-                                accept="image/*"
-                                onChange={handleAvatarChange}
-                                className="hidden"
-                            />
-                        </label>
-                        <p className="text-[10px] text-slate-400 mt-2 font-bold uppercase tracking-widest">Select Profile Picture</p>
-                    </div>
+
 
                     {/* Role Selection */}
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
