@@ -5,6 +5,7 @@ const ErrorHandler = require('../utils/errorHandler');
 const { uploadToCloudinary, deleteFromCloudinary } = require('../utils/cloudinary');
 
 exports.registerUser = catchAsyncErrors(async (req, res, next) => {
+    console.log("Register User: Request received", req.body);
     const { name, email, phone, password, role } = req.body;
     
     let avatar = {
@@ -13,6 +14,7 @@ exports.registerUser = catchAsyncErrors(async (req, res, next) => {
     };
 
     if (req.file) {
+        console.log("Register User: Processing file upload");
         try {
             if (req.file.path) {
                 const result = await uploadToCloudinary(req.file.path, 'smartroom/avatars');
@@ -26,6 +28,7 @@ exports.registerUser = catchAsyncErrors(async (req, res, next) => {
         }
     }
 
+    console.log("Register User: Creating user in DB");
     const user = await authService.registerUser({
         name,
         email,
@@ -34,6 +37,7 @@ exports.registerUser = catchAsyncErrors(async (req, res, next) => {
         role,
         avatar
     });
+    console.log("Register User: User created", user._id);
 
     sendToken(user, 201, res);
 });
