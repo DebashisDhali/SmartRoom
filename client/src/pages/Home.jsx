@@ -143,7 +143,7 @@ const Home = () => {
             {/* Featured Rooms Section */}
             <section className="py-20">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <div className="flex items-end justify-between mb-12">
+                    <div className="flex flex-col md:flex-row items-start md:items-end justify-between mb-12 gap-4 md:gap-0">
                         <div>
                             <h2 className="text-3xl font-bold mb-2 text-slate-900 text-left">Newest Listings</h2>
                             <p className="text-slate-500 text-left">Check out the latest rooms posted in your city</p>
