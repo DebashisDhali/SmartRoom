@@ -13,8 +13,17 @@ exports.registerUser = catchAsyncErrors(async (req, res, next) => {
     };
 
     if (req.file) {
-        const result = await uploadToCloudinary(req.file.path, 'smartroom/avatars');
-        avatar = result;
+        try {
+            if (req.file.path) {
+                const result = await uploadToCloudinary(req.file.path, 'smartroom/avatars');
+                avatar = result;
+            } else {
+                 console.log("File uploaded but no path found (likely memory storage). Skipping Cloudinary for safety.");
+            }
+        } catch (uploadError) {
+            console.error("Cloudinary Upload Failed:", uploadError);
+            // We continue without the avatar if upload fails, rather than crashing 500
+        }
     }
 
     const user = await authService.registerUser({
