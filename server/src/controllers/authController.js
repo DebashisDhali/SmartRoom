@@ -16,11 +16,19 @@ exports.registerUser = catchAsyncErrors(async (req, res, next) => {
     if (req.file) {
         console.log("Register User: Processing file upload");
         try {
-            if (req.file.path) {
+            // Check if file is in memory (buffer) or on disk (path)
+            if (req.file.buffer) {
+                // Handle Memory Storage (Vercel)
+                const b64 = Buffer.from(req.file.buffer).toString("base64");
+                let dataURI = "data:" + req.file.mimetype + ";base64," + b64;
+                const result = await uploadToCloudinary(dataURI, 'smartroom/avatars');
+                avatar = result;
+            } else if (req.file.path) {
+                // Handle Disk Storage (Localhost)
                 const result = await uploadToCloudinary(req.file.path, 'smartroom/avatars');
                 avatar = result;
             } else {
-                 console.log("File uploaded but no path found (likely memory storage). Skipping Cloudinary for safety.");
+                 console.log("File uploaded but no path/buffer found. Skipping Cloudinary.");
             }
         } catch (uploadError) {
             console.error("Cloudinary Upload Failed:", uploadError);
