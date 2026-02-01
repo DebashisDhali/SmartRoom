@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { LayoutDashboard, Home, Calendar, Heart, Settings, Plus, Star, MapPin, ChevronRight, CheckCircle2, Clock, XCircle, User, Camera, Edit } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import axios from 'axios';
+import api from '../utils/api';
 import { toast } from 'react-hot-toast';
 
 const Dashboard = () => {
@@ -23,7 +23,7 @@ const Dashboard = () => {
             const fetchMyListings = async () => {
                 try {
                     setLoadingListings(true);
-                    const { data } = await axios.get('http://localhost:5000/api/v1/rooms/owner/me', { withCredentials: true });
+                    const { data } = await api.get('/rooms/owner/me');
                     setListings(data.rooms);
                 } catch (error) {
                     console.error('Error fetching listings:', error);
@@ -38,7 +38,7 @@ const Dashboard = () => {
     const handleDelete = async (roomId) => {
         if (!window.confirm('Are you sure you want to delete this listing?')) return;
         try {
-            await axios.delete(`http://localhost:5000/api/v1/rooms/${roomId}`, { withCredentials: true });
+            await api.delete(`/rooms/${roomId}`);
             toast.success('Listing deleted');
             setListings(listings.filter(r => r._id !== roomId));
         } catch (error) {
@@ -49,7 +49,7 @@ const Dashboard = () => {
     const handleToggleStatus = async (roomId, currentStatus) => {
         const newStatus = currentStatus === 'Available' ? 'Booked' : 'Available';
         try {
-            await axios.patch(`http://localhost:5000/api/v1/rooms/${roomId}/status`, { status: newStatus }, { withCredentials: true });
+            await api.patch(`/rooms/${roomId}/status`, { status: newStatus });
             toast.success(`Room marked as ${newStatus}`);
             setListings(listings.map(room => room._id === roomId ? { ...room, availabilityStatus: newStatus } : room));
         } catch (error) {
