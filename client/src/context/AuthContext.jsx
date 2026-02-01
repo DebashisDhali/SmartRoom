@@ -45,6 +45,9 @@ export const AuthProvider = ({ children }) => {
         try {
             setLoading(true);
             const { data } = await api.post('/auth/login', { email, password });
+            if (data.token) {
+                localStorage.setItem('token', data.token);
+            }
             setUser(data.user);
             setIsAuthenticated(true);
             toast.success('Logged in successfully');
@@ -99,6 +102,7 @@ export const AuthProvider = ({ children }) => {
     const logout = async () => {
         try {
             await api.get('/auth/logout');
+            localStorage.removeItem('token');
             setUser(null);
             setIsAuthenticated(false);
             toast.success('Logged out');
