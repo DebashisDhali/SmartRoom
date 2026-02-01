@@ -98,7 +98,16 @@ exports.updateProfile = catchAsyncErrors(async (req, res, next) => {
             await deleteFromCloudinary(user.avatar.public_id);
         }
 
-        const result = await uploadToCloudinary(req.file.path, 'smartroom/avatars');
+        let result;
+        if (req.file.buffer) {
+            // Handle Memory Storage (Vercel)
+            const b64 = Buffer.from(req.file.buffer).toString("base64");
+            let dataURI = "data:" + req.file.mimetype + ";base64," + b64;
+            result = await uploadToCloudinary(dataURI, 'smartroom/avatars');
+        } else {
+             // Handle Disk Storage (Localhost if configured that way)
+            result = await uploadToCloudinary(req.file.path, 'smartroom/avatars');
+        }
         newData.avatar = result;
     }
 

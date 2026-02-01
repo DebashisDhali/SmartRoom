@@ -13,14 +13,28 @@ exports.createRoom = catchAsyncErrors(async (req, res, next) => {
 
     if (req.files && req.files.images) {
         for (const file of req.files.images) {
-            const result = await uploadToCloudinary(file.path, 'smartroom/rooms/images');
+            let result;
+            if (file.buffer) {
+                const b64 = Buffer.from(file.buffer).toString("base64");
+                const dataURI = "data:" + file.mimetype + ";base64," + b64;
+                result = await uploadToCloudinary(dataURI, 'smartroom/rooms/images');
+            } else {
+                result = await uploadToCloudinary(file.path, 'smartroom/rooms/images');
+            }
             images.push(result);
         }
     }
 
     if (req.files && req.files.videos) {
         for (const file of req.files.videos) {
-            const result = await uploadToCloudinary(file.path, 'smartroom/rooms/videos');
+            let result;
+            if (file.buffer) {
+                const b64 = Buffer.from(file.buffer).toString("base64");
+                const dataURI = "data:" + file.mimetype + ";base64," + b64;
+                result = await uploadToCloudinary(dataURI, 'smartroom/rooms/videos');
+            } else {
+                result = await uploadToCloudinary(file.path, 'smartroom/rooms/videos');
+            }
             videos.push(result);
         }
     }
@@ -78,14 +92,28 @@ exports.updateRoom = catchAsyncErrors(async (req, res, next) => {
 
     if (req.files && req.files.images) {
         for (const file of req.files.images) {
-            const result = await uploadToCloudinary(file.path, 'smartroom/rooms/images');
+            let result;
+            if (file.buffer) {
+                const b64 = Buffer.from(file.buffer).toString("base64");
+                const dataURI = "data:" + file.mimetype + ";base64," + b64;
+                result = await uploadToCloudinary(dataURI, 'smartroom/rooms/images');
+            } else {
+                result = await uploadToCloudinary(file.path, 'smartroom/rooms/images');
+            }
             images.push(result);
         }
     }
 
     if (req.files && req.files.videos) {
         for (const file of req.files.videos) {
-            const result = await uploadToCloudinary(file.path, 'smartroom/rooms/videos');
+            let result;
+            if (file.buffer) {
+                const b64 = Buffer.from(file.buffer).toString("base64");
+                const dataURI = "data:" + file.mimetype + ";base64," + b64;
+                result = await uploadToCloudinary(dataURI, 'smartroom/rooms/videos');
+            } else {
+                result = await uploadToCloudinary(file.path, 'smartroom/rooms/videos');
+            }
             videos.push(result);
         }
     }
