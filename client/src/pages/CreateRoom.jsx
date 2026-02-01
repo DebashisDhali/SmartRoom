@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../utils/api';
-import { Upload, X, MapPin, DollarSign, Home, List, FileText, Check, AlertCircle, PlayCircle, Loader2, CheckCircle2, Info, ImagePlus, Video, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Upload, X, MapPin, DollarSign, Home, List, FileText, Check, AlertCircle, PlayCircle, Loader2, CheckCircle2, Info, ImagePlus, Video, ChevronLeft, ChevronRight, Plus } from 'lucide-react';
 import { toast } from 'react-hot-toast';
 import { useAuth } from '../context/AuthContext';
 

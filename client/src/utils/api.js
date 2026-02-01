@@ -6,6 +6,7 @@ const getBaseUrl = () => {
     let url = import.meta.env.VITE_API_URL || '/api/v1';
     
     // Ensure no double slashes, but keep the http:// or https:// protocol if present
+    // Robust regex to fix things like https://domain.com//api
     return url.replace(/([^:]\/)\/+/g, "$1");
 };
 

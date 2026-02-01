@@ -29,6 +29,14 @@ const startServer = async () => {
     try {
         await connectDatabase();
         
+        if (process.env.NODE_ENV !== 'production' || process.env.VERCEL) {
+             console.log("--- Server Environment Check ---");
+             console.log("MONGODB_URI:", process.env.MONGODB_URI ? "Defined (Starts with " + process.env.MONGODB_URI.substring(0, 5) + "...)" : "UNDEFINED");
+             console.log("JWT_SECRET:", process.env.JWT_SECRET ? "Defined" : "UNDEFINED");
+             console.log("CLOUDINARY_CLOUD_NAME:", process.env.CLOUDINARY_CLOUD_NAME ? "Defined" : "UNDEFINED");
+             console.log("FRONTEND_URL:", process.env.FRONTEND_URL || "UNDEFINED");
+        }
+
         server = app.listen(process.env.PORT || 5000, () => {
             console.log(`Server is working on http://localhost:${process.env.PORT || 5000}`);
         });
