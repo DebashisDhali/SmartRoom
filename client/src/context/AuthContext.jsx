@@ -11,14 +11,30 @@ export const AuthProvider = ({ children }) => {
 
     useEffect(() => {
         const loadUser = async () => {
+            // Safety timeout: If backend is dead, don't hang forever
+            const timer = setTimeout(() => {
+                console.warn("Auth check timed out - forcing app load");
+                setLoading(false);
+            }, 2000);
+
             try {
                 const { data } = await api.get('/auth/me');
-                setUser(data.user);
-                setIsAuthenticated(true);
+                console.log("User loaded:", data.user);
+
+                if (data.user) {
+                    setUser(data.user);
+                    setIsAuthenticated(true);
+                } else {
+                    console.warn("User data is null despite 200 OK - Treating as guest");
+                    setUser(null);
+                    setIsAuthenticated(false);
+                }
             } catch (error) {
+                console.log("No user session found or server error:", error.message);
                 setIsAuthenticated(false);
                 setUser(null);
             } finally {
+                clearTimeout(timer);
                 setLoading(false);
             }
         };
@@ -47,9 +63,8 @@ export const AuthProvider = ({ children }) => {
             setLoading(true);
             // Don't set Content-Type manually for FormData, let Axios handle it with boundary
             const { data } = await api.post('/auth/register', userData);
-            setUser(data.user);
-            setIsAuthenticated(true);
-            toast.success('Registered successfully');
+            // Don't auto-login
+            toast.success('Registered successfully. Please login.');
             return data;
         } catch (error) {
             console.error("Registration Error:", error);

@@ -47,7 +47,11 @@ exports.registerUser = catchAsyncErrors(async (req, res, next) => {
     });
     console.log("Register User: User created", user._id);
 
-    sendToken(user, 201, res);
+    // Do not log in automatically.
+    res.status(201).json({
+        success: true,
+        message: "Registration successful. Please login to continue.",
+    });
 });
 
 exports.loginUser = catchAsyncErrors(async (req, res, next) => {

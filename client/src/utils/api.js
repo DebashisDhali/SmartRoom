@@ -1,8 +1,11 @@
 import axios from 'axios';
 
 const getBaseUrl = () => {
+    // If VITE_API_URL is set (e.g. for Vercel), use it. 
+    // Otherwise fallback to /api/v1 (which relies on vite.config.js proxy locally)
     let url = import.meta.env.VITE_API_URL || '/api/v1';
-    // Fix common issue where user puts double slash in env var (e.g. .app//api)
+    
+    // Ensure no double slashes, but keep the http:// or https:// protocol if present
     return url.replace(/([^:]\/)\/+/g, "$1");
 };
 

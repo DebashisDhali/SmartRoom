@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { Mail, Lock, User, Phone, ArrowRight, UserPlus, Home, Camera } from 'lucide-react';
+import { Mail, Lock, User, Phone, ArrowRight, UserPlus, Home } from 'lucide-react';
 
 const Register = () => {
     const [formData, setFormData] = useState({
@@ -11,8 +11,6 @@ const Register = () => {
         password: '',
         role: 'seeker',
     });
-    const [avatar, setAvatar] = useState(null);
-    const [avatarPreview, setAvatarPreview] = useState(null);
     const { register, loading } = useAuth();
     const navigate = useNavigate();
 
@@ -20,30 +18,21 @@ const Register = () => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
-    const handleAvatarChange = (e) => {
-        const file = e.target.files[0];
-        if (file) {
-            setAvatar(file);
-            setAvatarPreview(URL.createObjectURL(file));
-        }
-    };
-
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            // Send as plain JSON object since we removed the avatar upload
-            const data = {
-                name: formData.name,
-                email: formData.email,
-                phone: formData.phone,
-                password: formData.password,
-                role: formData.role
-            };
+            const data = new FormData();
+            data.append('name', formData.name);
+            data.append('email', formData.email);
+            data.append('phone', formData.phone);
+            data.append('password', formData.password);
+            data.append('role', formData.role);
 
             await register(data);
-            navigate('/dashboard');
+            navigate('/login');
         } catch (error) {
             // Error is handled in context
+            console.error("Registration failed:", error);
         }
     };
 
@@ -66,7 +55,6 @@ const Register = () => {
                 </div>
 
                 <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
-
 
                     {/* Role Selection */}
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

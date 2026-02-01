@@ -45,13 +45,14 @@
 
 /* Scrollbar styling */
 ::-webkit-scrollbar {
-  width: 6px;
+  width: 8px;
+  height: 8px;
 }
 
 ::-webkit-scrollbar-track {
-  @apply bg-transparent;
+  @apply bg-slate-50;
 }
 
 ::-webkit-scrollbar-thumb {
-  @apply bg-slate-200 rounded-full hover:bg-slate-300;
+  @apply bg-slate-300 rounded-full hover:bg-slate-400 transition-colors;
 }

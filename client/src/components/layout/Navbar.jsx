@@ -39,7 +39,7 @@ const Navbar = () => {
                             </Link>
                         ))}
 
-                        {isAuthenticated ? (
+                        {isAuthenticated && user ? (
                             <div className="flex items-center space-x-4">
                                 {(user.role === 'owner' || user.role === 'admin') && (
                                     <Link

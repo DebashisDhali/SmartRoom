@@ -1,20 +1,25 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Search, MapPin, Home as HomeIcon, Star, Shield, Zap, User } from 'lucide-react';
-import axios from 'axios';
+import api from '../utils/api';
 import RoomCard from '../components/rooms/RoomCard';
 
 const Home = () => {
     const navigate = useNavigate();
     const [featuredRooms, setFeaturedRooms] = useState([]);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         const fetchFeatured = async () => {
             try {
-                const { data } = await axios.get('http://localhost:5000/api/v1/rooms');
-                setFeaturedRooms(data.rooms.slice(0, 3));
+                const { data } = await api.get('/rooms');
+                if (data && data.rooms) {
+                    setFeaturedRooms(data.rooms.slice(0, 3));
+                }
             } catch (error) {
                 console.error('Error fetching featured rooms:', error);
+            } finally {
+                setLoading(false);
             }
         };
         fetchFeatured();
@@ -158,11 +163,7 @@ const Home = () => {
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                        {featuredRooms.length > 0 ? (
-                            featuredRooms.map((room) => (
-                                <RoomCard key={room._id} room={room} />
-                            ))
-                        ) : (
+                        {loading ? (
                             [1, 2, 3].map((n) => (
                                 <div key={n} className="bg-white rounded-3xl h-96 animate-pulse border border-slate-100">
                                     <div className="h-2/3 bg-slate-200 rounded-t-3xl"></div>
@@ -172,6 +173,23 @@ const Home = () => {
                                     </div>
                                 </div>
                             ))
+                        ) : featuredRooms.length > 0 ? (
+                            featuredRooms.map((room) => (
+                                <RoomCard key={room._id} room={room} />
+                            ))
+                        ) : (
+                            <div className="col-span-full text-center py-10">
+                                <div className="bg-slate-50 rounded-3xl p-8 inline-block">
+                                    <HomeIcon size={48} className="mx-auto text-slate-300 mb-4" />
+                                    <p className="text-slate-500 font-medium">No featured rooms available at the moment.</p>
+                                    <button
+                                        onClick={() => navigate('/rooms')}
+                                        className="mt-4 text-primary-600 font-bold hover:underline"
+                                    >
+                                        Browse all listings
+                                    </button>
+                                </div>
+                            </div>
                         )}
                     </div>
                 </div>

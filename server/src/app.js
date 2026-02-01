@@ -14,16 +14,18 @@ app.use(express.urlencoded({ limit: '100mb', extended: true }));
 app.use(cookieParser());
 app.use(cors({
     origin: function (origin, callback) {
-        const allowedOrigins = [
-            'http://localhost:5173', 
-            'http://localhost:5174',
-            'http://127.0.0.1:5173',
-            'http://127.0.0.1:5174',
-            process.env.FRONTEND_URL,
-        ];
-        
         // Allow requests with no origin (like mobile apps or curl requests)
         if (!origin) return callback(null, true);
+        
+        // In development, allow all origins to prevent frustration with local network testing
+        if (process.env.NODE_ENV !== 'production') {
+            return callback(null, true);
+        }
+
+        const allowedOrigins = [
+            process.env.FRONTEND_URL,
+            'https://living-room-finder.vercel.app' // Explicitly allow Vercel domain if env is missing
+        ];
         
         if (allowedOrigins.indexOf(origin) !== -1 || /vercel\.app$/.test(origin)) {
             return callback(null, true);
