@@ -8,6 +8,9 @@ const errorMiddleware = require('./middlewares/error');
 
 const app = express();
 
+// Trust proxy is required for secure cookies to work on Vercel/Heroku
+app.set('trust proxy', 1);
+
 // Middlewares
 app.use(express.json({ limit: '100mb' }));
 app.use(express.urlencoded({ limit: '100mb', extended: true }));

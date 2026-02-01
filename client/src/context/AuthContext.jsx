@@ -84,9 +84,7 @@ export const AuthProvider = ({ children }) => {
     const updateProfile = async (formData) => {
         try {
             setLoading(true);
-            const { data } = await api.put('/users/me/update', formData, {
-                headers: { 'Content-Type': 'multipart/form-data' }
-            });
+            const { data } = await api.put('/auth/me/update', formData); // Fixed route and removed manual header
             setUser(data.user);
             toast.success('Profile updated successfully');
             return data;
