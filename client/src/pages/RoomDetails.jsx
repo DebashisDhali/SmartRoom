@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import axios from 'axios';
+import api from '../utils/api';
 import { MapPin, Users, Heart, Share2, Star, CheckCircle2, ShieldCheck, ChevronLeft, Calendar, MessageSquare, Phone, Edit, Settings, RefreshCcw, Info, Facebook } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { toast } from 'react-hot-toast';
@@ -16,7 +16,7 @@ const RoomDetails = () => {
         const fetchRoom = async () => {
             try {
                 setLoading(true);
-                const { data } = await axios.get(`http://localhost:5000/api/v1/rooms/${id}`);
+                const { data } = await api.get(`/rooms/${id}`);
                 setRoom(data.room);
             } catch (error) {
                 console.error('Error fetching room:', error);
@@ -53,11 +53,11 @@ const RoomDetails = () => {
         }
         try {
             setReviewLoading(true);
-            const { data } = await axios.put(`http://localhost:5000/api/v1/rooms/review`, {
+            const { data } = await api.put(`/rooms/review`, {
                 rating: reviewData.rating,
                 comment: reviewData.comment,
                 roomId: id
-            }, { withCredentials: true });
+            });
 
             toast.success('Review submitted successfully!');
             setRoom(data.room);
@@ -72,7 +72,7 @@ const RoomDetails = () => {
     const handleToggleStatus = async () => {
         const newStatus = room.availabilityStatus === 'Available' ? 'Booked' : 'Available';
         try {
-            await axios.patch(`http://localhost:5000/api/v1/rooms/${id}/status`, { status: newStatus }, { withCredentials: true });
+            await api.patch(`/rooms/${id}/status`, { status: newStatus });
             toast.success(`Room marked as ${newStatus}`);
             setRoom({ ...room, availabilityStatus: newStatus });
         } catch (error) {

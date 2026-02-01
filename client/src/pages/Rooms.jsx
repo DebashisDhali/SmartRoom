@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import axios from 'axios';
+import api from '../utils/api';
 import RoomCard from '../components/rooms/RoomCard';
 import { Search, Filter, SlidersHorizontal, MapPin, X } from 'lucide-react';
 import { useLocation } from 'react-router-dom';
@@ -39,7 +39,7 @@ const Rooms = () => {
             if (filters.minPrice) queryParams.append('minPrice', filters.minPrice);
             if (filters.maxPrice) queryParams.append('maxPrice', filters.maxPrice);
 
-            const { data } = await axios.get(`http://localhost:5000/api/v1/rooms?${queryParams.toString()}`);
+            const { data } = await api.get(`/rooms?${queryParams.toString()}`);
             setRooms(data.rooms);
         } catch (error) {
             console.error('Error fetching rooms:', error);
