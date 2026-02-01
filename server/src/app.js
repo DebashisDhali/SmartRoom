@@ -24,7 +24,8 @@ app.use(cors({
 
         const allowedOrigins = [
             process.env.FRONTEND_URL,
-            'https://living-room-finder.vercel.app' // Explicitly allow Vercel domain if env is missing
+            'https://living-room-finder.vercel.app', // Explicitly allow Vercel domain if env is missing
+            'https://smart-room-omega.vercel.app'
         ];
         
         if (allowedOrigins.indexOf(origin) !== -1 || /vercel\.app$/.test(origin)) {
